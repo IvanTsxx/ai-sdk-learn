@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { LessonHints } from "@/components/game/lesson-hints";
 import { getLessonById, levelNames } from "@/lib/lessons";
 import { useGameStore } from "@/lib/store";
 
@@ -122,6 +123,9 @@ export function LessonDescription() {
           </Badge>
         ))}
       </div>
+
+      {/* Hints */}
+      <LessonHints />
     </div>
   );
 }
