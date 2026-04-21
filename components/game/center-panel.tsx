@@ -6,7 +6,6 @@ import {
 } from "../ui/resizable";
 import { ActionBar } from "./action-bar";
 import { CodeEditor } from "./code-editor";
-import { ExplanationPanel } from "./explanation-panel";
 import { LessonDescription } from "./lesson-description";
 
 export function CenterPanel() {
@@ -24,7 +23,6 @@ export function CenterPanel() {
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize="50%" maxSize="50%" minSize="20%">
           <CodeEditor />
-          <ExplanationPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
 

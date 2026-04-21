@@ -4,6 +4,7 @@ import { Loader2, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGameStore } from "@/lib/store";
+import { MemoizedMarkdown } from "../memoized-markdown";
 
 export function ExplanationPanel() {
   const { explanation, isExplaining, showExplanation, setShowExplanation } =
@@ -37,12 +38,7 @@ export function ExplanationPanel() {
       <ScrollArea className="h-48">
         <div className="p-4">
           {explanation ? (
-            <p className="whitespace-pre-wrap text-muted-foreground text-sm leading-relaxed">
-              {explanation}
-              {isExplaining && (
-                <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-primary" />
-              )}
-            </p>
+            <MemoizedMarkdown content={explanation} id="explanation" />
           ) : isExplaining ? (
             <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <Loader2 className="h-3 w-3 animate-spin" />

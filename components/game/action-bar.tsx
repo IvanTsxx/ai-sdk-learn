@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Eye, Play, RotateCcw, Sparkles, X } from "lucide-react";
+import { MemoizedMarkdown } from "@/components/memoized-markdown";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,9 +13,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { getLessonById, validateCode } from "@/lib/lessons";
 import { useGameStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function ActionBar() {
   const {
@@ -23,6 +34,9 @@ export function ActionBar() {
     validationResult,
     isRunning,
     showSolution,
+    showExplanation,
+    explanation,
+    hasReexplained,
     setCode,
     setValidationResult,
     setIsRunning,
@@ -33,6 +47,7 @@ export function ActionBar() {
     setExplanation,
     setIsExplaining,
     setShowExplanation,
+    setHasReexplained,
   } = useGameStore();
 
   const lesson = getLessonById(currentLessonId);
@@ -164,6 +179,13 @@ export function ActionBar() {
     }
   };
 
+  const handleReexplain = async () => {
+    setExplanation("");
+    setHasReexplained(false);
+    setShowExplanation(true);
+    await handleExplain();
+  };
+
   return (
     <div className="flex items-center justify-between border-border border-t bg-card px-4 py-3">
       {/* Left: Validation result */}
@@ -234,10 +256,40 @@ export function ActionBar() {
           </DialogContent>
         </Dialog>
 
-        <Button onClick={handleExplain} size="sm" variant="ghost">
-          <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-          Explicar
-        </Button>
+        <Sheet onOpenChange={setShowExplanation} open={showExplanation}>
+          <SheetTrigger
+            render={
+              <Button
+                disabled={isRunning || (explanation !== "" && !hasReexplained)}
+                onClick={handleExplain}
+                size="sm"
+                variant="ghost"
+              />
+            }
+          >
+            <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+            Explicar con IA
+          </SheetTrigger>
+          <SheetContent className="flex-1">
+            <SheetHeader>
+              <SheetTitle>Explicacion IA</SheetTitle>
+              <SheetDescription>Explicacion de tu solucion</SheetDescription>
+            </SheetHeader>
+            <ScrollArea className="h-[calc(100vh-200px)] w-full p-4">
+              {explanation && (
+                <div className="prose dark:prose-invert">
+                  <MemoizedMarkdown content={explanation} id="explanation" />
+                </div>
+              )}
+            </ScrollArea>
+            <SheetFooter>
+              <Button onClick={handleReexplain}>
+                <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                Re-explicar
+              </Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
 
         <Button disabled={isRunning} onClick={handleRun} size="sm">
           <Play className="mr-1.5 h-3.5 w-3.5" />
