@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Eye, Play, RotateCcw, Sparkles, X } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { MemoizedMarkdown } from "@/components/memoized-markdown";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 
 export function ActionBar() {
+  const ref = useRef<HTMLDivElement>(null);
   const {
     currentLessonId,
     currentCode,
@@ -36,7 +38,7 @@ export function ActionBar() {
     showSolution,
     showExplanation,
     explanation,
-    hasReexplained,
+
     setCode,
     setValidationResult,
     setIsRunning,
@@ -51,6 +53,11 @@ export function ActionBar() {
   } = useGameStore();
 
   const lesson = getLessonById(currentLessonId);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  }, [explanation]);
 
   if (!lesson) {
     return null;
@@ -112,6 +119,10 @@ export function ActionBar() {
   };
 
   const handleExplain = async () => {
+    if (explanation !== "") {
+      setShowExplanation(true);
+      return;
+    }
     setExplanation("");
     setShowExplanation(true);
     setIsExplaining(true);
@@ -260,7 +271,7 @@ export function ActionBar() {
           <SheetTrigger
             render={
               <Button
-                disabled={isRunning || (explanation !== "" && !hasReexplained)}
+                disabled={isRunning}
                 onClick={handleExplain}
                 size="sm"
                 variant="ghost"
@@ -268,7 +279,7 @@ export function ActionBar() {
             }
           >
             <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-            Explicar con IA
+            {explanation === "" ? "Explicar con IA" : "Explicacion"}
           </SheetTrigger>
           <SheetContent className="flex-1">
             <SheetHeader>
@@ -281,6 +292,7 @@ export function ActionBar() {
                   <MemoizedMarkdown content={explanation} id="explanation" />
                 </div>
               )}
+              <div ref={ref} />
             </ScrollArea>
             <SheetFooter>
               <Button onClick={handleReexplain}>

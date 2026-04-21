@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Lock, Play } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Progress,
@@ -10,6 +11,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -19,7 +21,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-
 import {
   type LessonLevel,
   lessons,
@@ -27,9 +28,10 @@ import {
   levelNames,
   totalXp,
 } from "@/lib/lessons";
-
 import { useGameStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { Icons } from "../icons";
+import { Button } from "../ui/button";
 
 const levelOrder: LessonLevel[] = ["basic", "intermediate", "advanced"];
 
@@ -146,6 +148,40 @@ export function LessonSidebar(props: React.ComponentProps<typeof Sidebar>) {
           );
         })}
       </SidebarContent>
+
+      {/* FOOTER */}
+      <SidebarFooter className="w-full px-2">
+        <Button
+          className="flex cursor-pointer items-center gap-2"
+          nativeButton={false}
+          render={
+            <Link
+              href="https://github.com/IvanTsxx/ai-sdk-learn"
+              rel="noopener noreferrer"
+              target="_blank"
+            />
+          }
+          variant="ghost"
+        >
+          <Icons.github />
+          <span>GitHub</span>
+        </Button>
+        <Button
+          className="flex cursor-pointer items-center gap-2"
+          nativeButton={false}
+          render={
+            <Link
+              href="https://sdk.vercel.ai/docs"
+              rel="noopener noreferrer"
+              target="_blank"
+            />
+          }
+          variant="ghost"
+        >
+          <Icons.vercel />
+          <span>AI SDK Docs</span>
+        </Button>
+      </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>

@@ -1,8 +1,18 @@
+/** biome-ignore-all lint/performance/useTopLevelRegex: <> */
 import { marked } from "marked";
-import { memo, useMemo } from "react";
+import type { CSSProperties } from "react";
+import { type ComponentProps, memo, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { oneDark as oneDarkStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+const syntaxStyle = oneDarkStyle as unknown as {
+  [key: string]: CSSProperties;
+};
+
+interface CodeProps extends ComponentProps<"code"> {
+  inline?: boolean;
+}
 
 function parseMarkdownIntoBlocks(markdown: string): string[] {
   const tokens = marked.lexer(markdown);
@@ -13,7 +23,7 @@ const MemoizedMarkdownBlock = memo(
   ({ content }: { content: string }) => (
     <ReactMarkdown
       components={{
-        code({ inline, className, children, ...props }) {
+        code({ inline, className, children, style, ref, ...props }: CodeProps) {
           const match = /language-(\w+)/.exec(className || "");
 
           if (inline) {
@@ -33,7 +43,7 @@ const MemoizedMarkdownBlock = memo(
               }}
               language={match?.[1] || "ts"}
               PreTag="div"
-              style={oneDark}
+              style={syntaxStyle}
               {...props}
             >
               {String(children).replace(/\n$/, "")}

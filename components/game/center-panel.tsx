@@ -10,8 +10,8 @@ import { LessonDescription } from "./lesson-description";
 
 export function CenterPanel() {
   return (
-    <div className="flex h-full w-full flex-col bg-background">
-      <ResizablePanelGroup className="w-full" orientation="vertical">
+    <div className="flex h-full w-full max-w-full flex-col bg-background">
+      <ResizablePanelGroup orientation="vertical">
         <ResizablePanel defaultSize="50%" maxSize="50%" minSize="20%">
           {/* Lesson description */}
           <ScrollArea className="max-h-[35%] shrink-0 border-border border-b">
