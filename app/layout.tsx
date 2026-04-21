@@ -41,7 +41,7 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+          <TooltipProvider delay={200}>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
