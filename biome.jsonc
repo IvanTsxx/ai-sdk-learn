@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/biome/core", "ultracite/biome/next"],
+  "linter": {
+    "rules": {
+      "performance": {
+        "noBarrelFile": "off",
+        "noNamespaceImport": "off"
+      },
+      "a11y": {
+        "useFocusableInteractive": "off",
+        "noRedundantRoles": "off",
+        "noLabelWithoutControl": "off",
+        "useAriaPropsForRole": "off",
+        "useSemanticElements": "off",
+        "useKeyWithClickEvents": "off",
+        "noNoninteractiveElementInteractions": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noDuplicateJsxProps": "off"
+      },
+      "style": {
+        "noNestedTernary": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
+      }
+    }
+  }
+}
