@@ -1,5 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -15,7 +15,8 @@ const fontMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AI SDK Quest - Aprende Vercel AI SDK",
-  description: "Juego interactivo para aprender el Vercel AI SDK desde cero hasta avanzado",
+  description:
+    "Juego interactivo para aprender el Vercel AI SDK desde cero hasta avanzado",
 };
 
 export const viewport: Viewport = {
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       className={cn(
-        "antialiased bg-background",
+        "bg-background antialiased",
         fontMono.variable,
         "font-sans",
         geist.variable
@@ -39,7 +40,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground">
-        <ThemeProvider defaultTheme="dark" attribute="class">
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
         </ThemeProvider>
       </body>

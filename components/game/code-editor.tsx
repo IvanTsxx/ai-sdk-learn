@@ -1,7 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useGameStore } from "@/lib/store";
 
 const Editor = dynamic(() => import("@monaco-editor/react"), {
@@ -17,12 +17,10 @@ export function CodeEditor() {
   const { currentCode, setCode } = useGameStore();
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full min-h-0 w-full">
       <Editor
-        height="100%"
         defaultLanguage="typescript"
-        theme="vs-dark"
-        value={currentCode}
+        height="100%"
         onChange={(val) => setCode(val ?? "")}
         options={{
           fontSize: 13,
@@ -49,6 +47,8 @@ export function CodeEditor() {
             bracketPairs: false,
           },
         }}
+        theme="vs-dark"
+        value={currentCode}
       />
     </div>
   );

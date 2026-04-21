@@ -1,25 +1,35 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { LessonDescription } from "./lesson-description";
-import { CodeEditor } from "./code-editor";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "../ui/resizable";
 import { ActionBar } from "./action-bar";
+import { CodeEditor } from "./code-editor";
 import { ExplanationPanel } from "./explanation-panel";
+import { LessonDescription } from "./lesson-description";
 
 export function CenterPanel() {
   return (
     <div className="flex h-full flex-col bg-background">
-      {/* Lesson description */}
-      <ScrollArea className="shrink-0 max-h-[35%] border-b border-border">
-        <div className="p-4">
-          <LessonDescription />
-        </div>
-      </ScrollArea>
-
-      {/* Code editor */}
-      <div className="flex-1 min-h-0">
-        <CodeEditor />
-      </div>
+      <ResizablePanel defaultSize="50%">
+        <ResizablePanelGroup orientation="vertical">
+          <ResizablePanel defaultSize="50%">
+            {/* Lesson description */}
+            <ScrollArea className="max-h-[35%] shrink-0 border-border border-b">
+              <div className="p-4">
+                <LessonDescription />
+              </div>
+            </ScrollArea>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize="50%">
+            <CodeEditor />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </ResizablePanel>
 
       {/* Explanation panel (conditional) */}
       <ExplanationPanel />

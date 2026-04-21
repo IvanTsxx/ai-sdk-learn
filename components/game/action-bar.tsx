@@ -1,19 +1,19 @@
 "use client";
 
-import { Play, Eye, Sparkles, RotateCcw, Check, X } from "lucide-react";
+import { Check, Eye, Play, RotateCcw, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { useGameStore } from "@/lib/store";
 import { getLessonById, validateCode } from "@/lib/lessons";
+import { useGameStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export function ActionBar() {
@@ -37,7 +37,9 @@ export function ActionBar() {
 
   const lesson = getLessonById(currentLessonId);
 
-  if (!lesson) return null;
+  if (!lesson) {
+    return null;
+  }
 
   const handleRun = async () => {
     setIsRunning(true);
@@ -83,18 +85,24 @@ export function ActionBar() {
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to get explanation");
+      if (!response.ok) {
+        throw new Error("Failed to get explanation");
+      }
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
 
-      if (!reader) throw new Error("No reader");
+      if (!reader) {
+        throw new Error("No reader");
+      }
 
       let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) {
+          break;
+        }
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
@@ -104,7 +112,9 @@ export function ActionBar() {
           const trimmed = line.trim();
           if (trimmed.startsWith("data:")) {
             const data = trimmed.slice(5).trim();
-            if (data === "[DONE]") continue;
+            if (data === "[DONE]") {
+              continue;
+            }
             try {
               const parsed = JSON.parse(data);
               // AI SDK 6 UIMessageStream format
@@ -128,13 +138,13 @@ export function ActionBar() {
   };
 
   return (
-    <div className="flex items-center justify-between border-t border-border bg-card px-4 py-3">
+    <div className="flex items-center justify-between border-border border-t bg-card px-4 py-3">
       {/* Left: Validation result */}
       <div className="flex items-center gap-2">
         {validationResult && (
           <div
             className={cn(
-              "flex items-center gap-1.5 text-xs font-medium",
+              "flex items-center gap-1.5 font-medium text-xs",
               validationResult.pass ? "text-primary" : "text-destructive"
             )}
           >
@@ -156,19 +166,23 @@ export function ActionBar() {
       {/* Right: Action buttons */}
       <div className="flex items-center gap-2">
         <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleReset}
           disabled={isRunning}
+          onClick={handleReset}
+          size="sm"
+          variant="ghost"
         >
-          <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+          <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
           Reset
         </Button>
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="ghost" size="sm" disabled={isRunning || showSolution}>
-              <Eye className="h-3.5 w-3.5 mr-1.5" />
+            <Button
+              disabled={isRunning || showSolution}
+              size="sm"
+              variant="ghost"
+            >
+              <Eye className="mr-1.5 h-3.5 w-3.5" />
               Solucion
             </Button>
           </DialogTrigger>
@@ -191,13 +205,13 @@ export function ActionBar() {
           </DialogContent>
         </Dialog>
 
-        <Button variant="ghost" size="sm" onClick={handleExplain}>
-          <Sparkles className="h-3.5 w-3.5 mr-1.5" />
+        <Button onClick={handleExplain} size="sm" variant="ghost">
+          <Sparkles className="mr-1.5 h-3.5 w-3.5" />
           Explicar
         </Button>
 
-        <Button size="sm" onClick={handleRun} disabled={isRunning}>
-          <Play className="h-3.5 w-3.5 mr-1.5" />
+        <Button disabled={isRunning} onClick={handleRun} size="sm">
+          <Play className="mr-1.5 h-3.5 w-3.5" />
           Run
         </Button>
       </div>

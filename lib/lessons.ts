@@ -2,24 +2,24 @@ export type LessonLevel = "basic" | "intermediate" | "advanced";
 export type LessonStatus = "locked" | "active" | "completed";
 
 export interface TooltipData {
-  term: string;
   description: string;
+  term: string;
 }
 
 export interface Lesson {
-  id: string;
-  title: string;
-  level: LessonLevel;
-  xp: number;
   concept: string;
-  fileContext: string;
   description: string;
-  starterCode: string;
-  solution: string;
-  validationPatterns: string[];
-  simulatedOutput: string;
+  fileContext: string;
+  id: string;
   isStreaming: boolean;
+  level: LessonLevel;
+  simulatedOutput: string;
+  solution: string;
+  starterCode: string;
+  title: string;
   tooltips: TooltipData[];
+  validationPatterns: string[];
+  xp: number;
 }
 
 export const lessons: Lesson[] = [
@@ -135,8 +135,13 @@ export async function POST(req: Request) {
 
   return result.toDataStreamResponse()
 }`,
-    validationPatterns: ["streamText", "toDataStreamResponse", "runtime = 'edge'"],
-    simulatedOutput: `The Vercel AI SDK is a powerful TypeScript toolkit that lets you build AI-powered applications using a unified API across 100+ language models. It handles streaming, tool calling, structured output, and agent loops — all with full type safety.`,
+    validationPatterns: [
+      "streamText",
+      "toDataStreamResponse",
+      "runtime = 'edge'",
+    ],
+    simulatedOutput:
+      "The Vercel AI SDK is a powerful TypeScript toolkit that lets you build AI-powered applications using a unified API across 100+ language models. It handles streaming, tool calling, structured output, and agent loops — all with full type safety.",
     isStreaming: true,
     tooltips: [
       {
@@ -162,7 +167,8 @@ export async function POST(req: Request) {
     title: "useChat en el cliente",
     level: "intermediate",
     xp: 200,
-    concept: "useChat, messages, input, handleInputChange, handleSubmit, status",
+    concept:
+      "useChat, messages, input, handleInputChange, handleSubmit, status",
     fileContext: "app/chat/page.tsx",
     description: `Es hora de conectar el frontend. El hook \`useChat\` maneja todo el estado del chat automaticamente.
 
@@ -321,7 +327,13 @@ export async function POST(req: Request) {
 
   return result.toDataStreamResponse()
 }`,
-    validationPatterns: ["tool(", "inputSchema:", "z.object(", "execute:", "maxSteps"],
+    validationPatterns: [
+      "tool(",
+      "inputSchema:",
+      "z.object(",
+      "execute:",
+      "maxSteps",
+    ],
     simulatedOutput: `[Tool call: getWeather({ city: "Buenos Aires" })]
 [Tool result: { city: "Buenos Aires", temperature: 22, condition: "sunny" }]
 

@@ -1,52 +1,57 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { lessons, type LessonStatus, type LessonLevel } from "./lessons";
+import { type LessonLevel, type LessonStatus, lessons } from "./lessons";
 
 interface LessonProgress {
-  status: LessonStatus;
   completedAt?: number;
+  status: LessonStatus;
 }
 
 interface GameState {
-  // Progress tracking
-  lessonProgress: Record<string, LessonProgress>;
-  totalXp: number;
-  currentLessonId: string;
-  
+  appendExplanation: (chunk: string) => void;
+  completeLesson: (lessonId: string) => void;
+
   // Editor state
   currentCode: string;
-  
-  // UI state
-  showSolution: boolean;
-  validationResult: { pass: boolean; hint?: string } | null;
-  isRunning: boolean;
-  simulatedOutput: string | null;
-  
+  currentLessonId: string;
+
   // Explanation panel
   explanation: string;
-  isExplaining: boolean;
-  showExplanation: boolean;
-  
-  // Actions
-  setCurrentLesson: (lessonId: string) => void;
-  setCode: (code: string) => void;
-  completeLesson: (lessonId: string) => void;
-  resetLesson: (lessonId: string) => void;
-  setShowSolution: (show: boolean) => void;
-  setValidationResult: (result: { pass: boolean; hint?: string } | null) => void;
-  setIsRunning: (running: boolean) => void;
-  setSimulatedOutput: (output: string | null) => void;
-  setExplanation: (explanation: string) => void;
-  setIsExplaining: (explaining: boolean) => void;
-  setShowExplanation: (show: boolean) => void;
-  appendExplanation: (chunk: string) => void;
-  resetProgress: () => void;
-  
+  getCompletedLessonsCount: () => number;
+
   // Computed
   getLessonStatus: (lessonId: string) => LessonStatus;
-  getCompletedLessonsCount: () => number;
-  getLevelProgress: (level: LessonLevel) => { completed: number; total: number };
+  getLevelProgress: (level: LessonLevel) => {
+    completed: number;
+    total: number;
+  };
+  isExplaining: boolean;
   isLevelCompleted: (level: LessonLevel) => boolean;
+  isRunning: boolean;
+  // Progress tracking
+  lessonProgress: Record<string, LessonProgress>;
+  resetLesson: (lessonId: string) => void;
+  resetProgress: () => void;
+  setCode: (code: string) => void;
+
+  // Actions
+  setCurrentLesson: (lessonId: string) => void;
+  setExplanation: (explanation: string) => void;
+  setIsExplaining: (explaining: boolean) => void;
+  setIsRunning: (running: boolean) => void;
+  setShowExplanation: (show: boolean) => void;
+  setShowSolution: (show: boolean) => void;
+  setSimulatedOutput: (output: string | null) => void;
+  setValidationResult: (
+    result: { pass: boolean; hint?: string } | null
+  ) => void;
+  showExplanation: boolean;
+
+  // UI state
+  showSolution: boolean;
+  simulatedOutput: string | null;
+  totalXp: number;
+  validationResult: { pass: boolean; hint?: string } | null;
 }
 
 const initialLessonProgress: Record<string, LessonProgress> = {};
@@ -75,11 +80,15 @@ export const useGameStore = create<GameState>()(
       // Actions
       setCurrentLesson: (lessonId) => {
         const lesson = lessons.find((l) => l.id === lessonId);
-        if (!lesson) return;
-        
+        if (!lesson) {
+          return;
+        }
+
         const status = get().getLessonStatus(lessonId);
-        if (status === "locked") return;
-        
+        if (status === "locked") {
+          return;
+        }
+
         set({
           currentLessonId: lessonId,
           currentCode: lesson.starterCode,
@@ -97,24 +106,28 @@ export const useGameStore = create<GameState>()(
         const state = get();
         const lessonIndex = lessons.findIndex((l) => l.id === lessonId);
         const lesson = lessons[lessonIndex];
-        
-        if (!lesson) return;
-        
+
+        if (!lesson) {
+          return;
+        }
+
         // Already completed
-        if (state.lessonProgress[lessonId]?.status === "completed") return;
-        
+        if (state.lessonProgress[lessonId]?.status === "completed") {
+          return;
+        }
+
         const newProgress = { ...state.lessonProgress };
         newProgress[lessonId] = {
           status: "completed" as LessonStatus,
           completedAt: Date.now(),
         };
-        
+
         // Unlock next lesson
         const nextLesson = lessons[lessonIndex + 1];
         if (nextLesson && newProgress[nextLesson.id]?.status === "locked") {
           newProgress[nextLesson.id] = { status: "active" };
         }
-        
+
         set({
           lessonProgress: newProgress,
           totalXp: state.totalXp + lesson.xp,
@@ -123,8 +136,10 @@ export const useGameStore = create<GameState>()(
 
       resetLesson: (lessonId) => {
         const lesson = lessons.find((l) => l.id === lessonId);
-        if (!lesson) return;
-        
+        if (!lesson) {
+          return;
+        }
+
         set({
           currentCode: lesson.starterCode,
           showSolution: false,
@@ -150,7 +165,7 @@ export const useGameStore = create<GameState>()(
             status: index === 0 ? "active" : "locked",
           };
         });
-        
+
         set({
           lessonProgress: freshProgress,
           totalXp: 0,
@@ -165,15 +180,13 @@ export const useGameStore = create<GameState>()(
       },
 
       // Computed getters
-      getLessonStatus: (lessonId) => {
-        return get().lessonProgress[lessonId]?.status ?? "locked";
-      },
+      getLessonStatus: (lessonId) =>
+        get().lessonProgress[lessonId]?.status ?? "locked",
 
-      getCompletedLessonsCount: () => {
-        return Object.values(get().lessonProgress).filter(
+      getCompletedLessonsCount: () =>
+        Object.values(get().lessonProgress).filter(
           (p) => p.status === "completed"
-        ).length;
-      },
+        ).length,
 
       getLevelProgress: (level) => {
         const levelLessons = lessons.filter((l) => l.level === level);

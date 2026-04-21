@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGameStore } from "@/lib/store";
@@ -9,12 +9,14 @@ export function ExplanationPanel() {
   const { explanation, isExplaining, showExplanation, setShowExplanation } =
     useGameStore();
 
-  if (!showExplanation) return null;
+  if (!showExplanation) {
+    return null;
+  }
 
   return (
-    <div className="border-t border-border bg-card">
+    <div className="border-border border-t bg-card">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border px-4 py-2">
+      <div className="flex items-center justify-between border-border border-b px-4 py-2">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary" />
           <span className="font-mono text-xs">Explicacion IA</span>
@@ -23,9 +25,9 @@ export function ExplanationPanel() {
           )}
         </div>
         <Button
-          variant="ghost"
-          size="icon-sm"
           onClick={() => setShowExplanation(false)}
+          size="icon-sm"
+          variant="ghost"
         >
           <X className="h-4 w-4" />
         </Button>
@@ -35,14 +37,14 @@ export function ExplanationPanel() {
       <ScrollArea className="h-48">
         <div className="p-4">
           {explanation ? (
-            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+            <p className="whitespace-pre-wrap text-muted-foreground text-sm leading-relaxed">
               {explanation}
               {isExplaining && (
-                <span className="inline-block w-1.5 h-4 bg-primary ml-0.5 animate-pulse" />
+                <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-primary" />
               )}
             </p>
           ) : isExplaining ? (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
               <Loader2 className="h-3 w-3 animate-spin" />
               <span>Generando explicacion...</span>
             </div>
