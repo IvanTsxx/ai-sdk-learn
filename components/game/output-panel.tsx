@@ -2,26 +2,32 @@
 
 import { Loader2, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarRail,
+} from "@/components/ui/sidebar";
+
 import { getLessonById } from "@/lib/lessons";
 import { useGameStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
-export function OutputPanel() {
+export function OutputSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const { currentLessonId, simulatedOutput, isRunning } = useGameStore();
   const lesson = getLessonById(currentLessonId);
+
   const [displayedText, setDisplayedText] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
   const animationRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Animate streaming output
   useEffect(() => {
     if (!(simulatedOutput && lesson)) {
       setDisplayedText("");
       return;
     }
 
-    // Clear any existing animation
     if (animationRef.current) {
       clearTimeout(animationRef.current);
     }
@@ -43,7 +49,6 @@ export function OutputPanel() {
 
       animate();
     } else {
-      // Non-streaming: show after delay
       setIsAnimating(true);
       animationRef.current = setTimeout(() => {
         setDisplayedText(simulatedOutput);
@@ -62,18 +67,23 @@ export function OutputPanel() {
   const hasToolCall = simulatedOutput?.includes("[Tool call:");
 
   return (
-    <div className="flex h-full flex-col border-border border-l bg-background">
-      {/* Header */}
-      <div className="flex items-center gap-2 border-border border-b px-4 py-3">
-        <Terminal className="h-4 w-4 text-muted-foreground" />
-        <span className="font-mono text-muted-foreground text-xs">Output</span>
-        {(isRunning || isAnimating) && (
-          <Loader2 className="ml-auto h-3 w-3 animate-spin text-primary" />
-        )}
-      </div>
+    <Sidebar side="right" {...props}>
+      {/* HEADER */}
+      <SidebarHeader>
+        <div className="flex items-center gap-2 px-2 py-2">
+          <Terminal className="h-4 w-4 text-muted-foreground" />
+          <span className="font-mono text-muted-foreground text-xs">
+            Output
+          </span>
 
-      {/* Output content */}
-      <ScrollArea className="flex-1">
+          {(isRunning || isAnimating) && (
+            <Loader2 className="ml-auto h-3 w-3 animate-spin text-primary" />
+          )}
+        </div>
+      </SidebarHeader>
+
+      {/* CONTENT */}
+      <SidebarContent>
         <div className="p-4">
           {simulatedOutput || isRunning ? (
             isRunning && !displayedText ? (
@@ -110,8 +120,10 @@ export function OutputPanel() {
             </div>
           )}
         </div>
-      </ScrollArea>
-    </div>
+      </SidebarContent>
+
+      <SidebarRail />
+    </Sidebar>
   );
 }
 
@@ -131,6 +143,7 @@ function ToolCallOutput({ text }: { text: string }) {
             </div>
           );
         }
+
         if (line.startsWith("[Tool result:")) {
           return (
             <div
@@ -141,9 +154,11 @@ function ToolCallOutput({ text }: { text: string }) {
             </div>
           );
         }
+
         if (line.startsWith("[Step")) {
           const isToolCall = line.includes("Tool call:");
           const isToolResult = line.includes("Tool result:");
+
           return (
             <div
               className={cn(
@@ -158,6 +173,7 @@ function ToolCallOutput({ text }: { text: string }) {
             </div>
           );
         }
+
         if (line.startsWith("[Agent complete")) {
           return (
             <div
@@ -168,6 +184,7 @@ function ToolCallOutput({ text }: { text: string }) {
             </div>
           );
         }
+
         if (line.trim()) {
           return (
             <p className="text-foreground leading-relaxed" key={i}>
@@ -175,6 +192,7 @@ function ToolCallOutput({ text }: { text: string }) {
             </p>
           );
         }
+
         return <div className="h-2" key={i} />;
       })}
     </div>

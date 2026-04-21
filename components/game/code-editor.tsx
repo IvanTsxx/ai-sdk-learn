@@ -1,7 +1,7 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import type { Monaco } from "@monaco-editor/react";
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useCallback } from "react";
 import { aiSdkTypes, zodTypes } from "@/lib/monaco-types";
@@ -53,49 +53,47 @@ export function CodeEditor() {
   }, []);
 
   return (
-    <div className="h-full min-h-0 w-full">
-      <Editor
-        beforeMount={handleBeforeMount}
-        defaultLanguage="typescript"
-        height="100%"
-        onChange={(val) => setCode(val ?? "")}
-        options={{
-          fontSize: 13,
-          fontFamily: "Geist Mono, monospace",
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          lineNumbers: "on",
-          renderLineHighlight: "line",
-          padding: { top: 12, bottom: 12 },
-          tabSize: 2,
-          automaticLayout: true,
-          wordWrap: "on",
-          scrollbar: {
-            vertical: "auto",
-            horizontal: "auto",
-            verticalScrollbarSize: 8,
-            horizontalScrollbarSize: 8,
-          },
-          overviewRulerBorder: false,
-          hideCursorInOverviewRuler: true,
-          overviewRulerLanes: 0,
-          guides: {
-            indentation: true,
-            bracketPairs: false,
-          },
-          quickSuggestions: {
-            other: true,
-            comments: false,
-            strings: true,
-          },
-          suggestOnTriggerCharacters: true,
-          parameterHints: {
-            enabled: true,
-          },
-        }}
-        theme="vs-dark"
-        value={currentCode}
-      />
-    </div>
+    <Editor
+      beforeMount={handleBeforeMount}
+      defaultLanguage="typescript"
+      height="100%"
+      onChange={(val) => setCode(val ?? "")}
+      options={{
+        fontSize: 13,
+        fontFamily: "Geist Mono, monospace",
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        lineNumbers: "on",
+        renderLineHighlight: "line",
+        padding: { top: 12, bottom: 12 },
+        tabSize: 2,
+        automaticLayout: true,
+        wordWrap: "on",
+        scrollbar: {
+          vertical: "auto",
+          horizontal: "auto",
+          verticalScrollbarSize: 8,
+          horizontalScrollbarSize: 8,
+        },
+        overviewRulerBorder: false,
+        hideCursorInOverviewRuler: true,
+        overviewRulerLanes: 0,
+        guides: {
+          indentation: true,
+          bracketPairs: false,
+        },
+        quickSuggestions: {
+          other: true,
+          comments: false,
+          strings: true,
+        },
+        suggestOnTriggerCharacters: true,
+        parameterHints: {
+          enabled: true,
+        },
+      }}
+      theme="vs-dark"
+      value={currentCode}
+    />
   );
 }

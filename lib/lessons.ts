@@ -7,8 +7,8 @@ export interface TooltipData {
 }
 
 export interface LessonTip {
-  title: string;
   content: string;
+  title: string;
 }
 
 export interface Lesson {
@@ -42,15 +42,18 @@ export const lessons: Lesson[] = [
     hints: [
       {
         title: "Estructura basica",
-        content: "generateText recibe un objeto con las propiedades 'model' y 'prompt'. Retorna una Promise con { text, usage, finishReason }.",
+        content:
+          "generateText recibe un objeto con las propiedades 'model' y 'prompt'. Retorna una Promise con { text, usage, finishReason }.",
       },
       {
         title: "Destructuring",
-        content: "Usa const { text } = await generateText({...}) para extraer solo el texto de la respuesta.",
+        content:
+          "Usa const { text } = await generateText({...}) para extraer solo el texto de la respuesta.",
       },
       {
         title: "Response JSON",
-        content: "En Next.js, usa Response.json({ text }) para retornar JSON desde una API route.",
+        content:
+          "En Next.js, usa Response.json({ text }) para retornar JSON desde una API route.",
       },
     ],
     description: `En esta leccion aprenderas a hacer tu primera llamada al AI SDK usando \`generateText\`.
@@ -125,15 +128,18 @@ export async function GET() {
     hints: [
       {
         title: "Sin await",
-        content: "streamText NO usa await porque retorna inmediatamente un objeto con el stream. El streaming ocurre cuando llamas toDataStreamResponse().",
+        content:
+          "streamText NO usa await porque retorna inmediatamente un objeto con el stream. El streaming ocurre cuando llamas toDataStreamResponse().",
       },
       {
         title: "toDataStreamResponse()",
-        content: "Este metodo convierte el stream en el formato que useChat espera en el cliente.",
+        content:
+          "Este metodo convierte el stream en el formato que useChat espera en el cliente.",
       },
       {
         title: "Edge runtime",
-        content: "export const runtime = 'edge' reduce latencia. Es opcional pero recomendado para streaming.",
+        content:
+          "export const runtime = 'edge' reduce latencia. Es opcional pero recomendado para streaming.",
       },
     ],
     description: `Ahora aprenderas a usar \`streamText\` para enviar respuestas en tiempo real.
@@ -211,15 +217,18 @@ export async function POST(req: Request) {
     hints: [
       {
         title: "Import correcto",
-        content: "useChat viene de '@ai-sdk/react', no de 'ai'. Asegurate de importarlo correctamente.",
+        content:
+          "useChat viene de '@ai-sdk/react', no de 'ai'. Asegurate de importarlo correctamente.",
       },
       {
         title: "API endpoint",
-        content: "useChat({ api: '/api/chat' }) conecta con tu ruta de streamText. El path debe coincidir.",
+        content:
+          "useChat({ api: '/api/chat' }) conecta con tu ruta de streamText. El path debe coincidir.",
       },
       {
         title: "Status para UX",
-        content: "Deshabilita el input cuando status !== 'ready' para evitar envios multiples mientras el modelo responde.",
+        content:
+          "Deshabilita el input cuando status !== 'ready' para evitar envios multiples mientras el modelo responde.",
       },
     ],
     description: `Es hora de conectar el frontend. El hook \`useChat\` maneja todo el estado del chat automaticamente.
@@ -326,15 +335,18 @@ assistant: Use streamText on the server and useChat on the client. The hook hand
     hints: [
       {
         title: "Estructura del tool",
-        content: "Un tool tiene: description (string), inputSchema (schema Zod), y execute (funcion async).",
+        content:
+          "Un tool tiene: description (string), inputSchema (schema Zod), y execute (funcion async).",
       },
       {
         title: "inputSchema vs parameters",
-        content: "En AI SDK v6 se renombro 'parameters' a 'inputSchema'. Usa inputSchema con un z.object().",
+        content:
+          "En AI SDK v6 se renombro 'parameters' a 'inputSchema'. Usa inputSchema con un z.object().",
       },
       {
         title: "maxSteps",
-        content: "Sin maxSteps, el modelo solo puede llamar tools una vez. Con maxSteps: 5, puede hacer hasta 5 iteraciones.",
+        content:
+          "Sin maxSteps, el modelo solo puede llamar tools una vez. Con maxSteps: 5, puede hacer hasta 5 iteraciones.",
       },
     ],
     description: `Los tools permiten que el modelo ejecute funciones en tu servidor.
@@ -432,19 +444,23 @@ The weather in Buenos Aires is currently sunny with a temperature of 22°C.`,
     xp: 300,
     concept: "generateObject, schema con Zod, output tipado",
     fileContext: "app/api/extract/route.ts",
-    docsUrl: "https://sdk.vercel.ai/docs/ai-sdk-core/generating-structured-data",
+    docsUrl:
+      "https://sdk.vercel.ai/docs/ai-sdk-core/generating-structured-data",
     hints: [
       {
         title: "schema vs prompt",
-        content: "El schema define la estructura del JSON. El prompt le dice al modelo que datos extraer o generar.",
+        content:
+          "El schema define la estructura del JSON. El prompt le dice al modelo que datos extraer o generar.",
       },
       {
         title: "Destructuring { object }",
-        content: "generateObject retorna { object, usage, finishReason }. El object ya esta tipado segun tu schema Zod.",
+        content:
+          "generateObject retorna { object, usage, finishReason }. El object ya esta tipado segun tu schema Zod.",
       },
       {
         title: "Validaciones Zod",
-        content: "Puedes usar z.string().email(), z.number().min(0), z.string().optional() para validar el output.",
+        content:
+          "Puedes usar z.string().email(), z.number().min(0), z.string().optional() para validar el output.",
       },
     ],
     description: `\`generateObject\` fuerza al modelo a retornar JSON estructurado segun tu schema Zod.
@@ -538,15 +554,18 @@ export async function POST(req: Request) {
     hints: [
       {
         title: "Instanciacion",
-        content: "new ToolLoopAgent({...}) crea el agente. Usalo fuera del handler para reutilizarlo entre requests.",
+        content:
+          "new ToolLoopAgent({...}) crea el agente. Usalo fuera del handler para reutilizarlo entre requests.",
       },
       {
         title: "system vs instructions",
-        content: "En ToolLoopAgent se usa 'system' para el system prompt, no 'instructions' como en versiones anteriores.",
+        content:
+          "En ToolLoopAgent se usa 'system' para el system prompt, no 'instructions' como en versiones anteriores.",
       },
       {
         title: ".generate() vs .stream()",
-        content: ".generate() espera a que termine y retorna el resultado completo. .stream() retorna deltas para UIs en tiempo real.",
+        content:
+          ".generate() espera a que termine y retorna el resultado completo. .stream() retorna deltas para UIs en tiempo real.",
       },
     ],
     description: `\`ToolLoopAgent\` es nuevo en AI SDK v6. Una clase que encapsula configuracion del modelo, tools, y logica del loop.

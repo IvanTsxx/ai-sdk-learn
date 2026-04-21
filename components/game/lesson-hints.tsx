@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { ChevronDown, ExternalLink, Lightbulb } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -17,7 +18,7 @@ export function LessonHints() {
   const lesson = getLessonById(currentLessonId);
   const [openHints, setOpenHints] = useState<Record<number, boolean>>({});
 
-  if (!lesson || !lesson.hints || lesson.hints.length === 0) {
+  if (!lesson?.hints || lesson.hints.length === 0) {
     return null;
   }
 
@@ -37,19 +38,20 @@ export function LessonHints() {
           <span className="font-medium">Tips para resolver</span>
         </div>
         <Button
-          asChild
           className="h-7 gap-1.5 text-xs"
+          nativeButton={false}
+          render={
+            <Link
+              href={lesson.docsUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            />
+          }
           size="sm"
           variant="outline"
         >
-          <a
-            href={lesson.docsUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <ExternalLink className="h-3 w-3" />
-            Ver Documentacion
-          </a>
+          <ExternalLink className="h-3 w-3" />
+          Ver Documentacion
         </Button>
       </div>
 
@@ -61,29 +63,31 @@ export function LessonHints() {
             onOpenChange={() => toggleHint(index)}
             open={openHints[index]}
           >
-            <CollapsibleTrigger asChild>
-              <button
-                className={cn(
-                  "flex w-full items-center justify-between rounded-md border border-border bg-secondary/50 px-3 py-2 text-left text-sm transition-colors hover:bg-secondary",
-                  openHints[index] && "bg-secondary"
-                )}
-                type="button"
-              >
-                <span className="flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 font-mono text-primary text-xs">
-                    {index + 1}
-                  </span>
-                  <span className="font-medium text-foreground text-xs">
-                    {hint.title}
-                  </span>
-                </span>
-                <ChevronDown
+            <CollapsibleTrigger
+              render={
+                <button
                   className={cn(
-                    "h-4 w-4 text-muted-foreground transition-transform",
-                    openHints[index] && "rotate-180"
+                    "flex w-full items-center justify-between rounded-md border border-border bg-secondary/50 px-3 py-2 text-left text-sm transition-colors hover:bg-secondary",
+                    openHints[index] && "bg-secondary"
                   )}
+                  type="button"
                 />
-              </button>
+              }
+            >
+              <span className="flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 font-mono text-primary text-xs">
+                  {index + 1}
+                </span>
+                <span className="font-medium text-foreground text-xs">
+                  {hint.title}
+                </span>
+              </span>
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 text-muted-foreground transition-transform",
+                  openHints[index] && "rotate-180"
+                )}
+              />
             </CollapsibleTrigger>
             <CollapsibleContent>
               <div className="mt-1 rounded-md border border-border bg-card px-3 py-2.5">

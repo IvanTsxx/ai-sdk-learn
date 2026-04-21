@@ -1,15 +1,17 @@
 "use client";
 
 import { FileCode2 } from "lucide-react";
+import { LessonHints } from "@/components/game/lesson-hints";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LessonHints } from "@/components/game/lesson-hints";
 import { getLessonById, levelNames } from "@/lib/lessons";
 import { useGameStore } from "@/lib/store";
+import { Separator } from "../ui/separator";
+import { SidebarTrigger } from "../ui/sidebar";
 
 export function LessonDescription() {
   const { currentLessonId } = useGameStore();
@@ -86,20 +88,28 @@ export function LessonDescription() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="mb-1 flex items-center gap-2">
-            <Badge
-              className="font-mono text-[10px] uppercase"
-              variant="outline"
-            >
-              {levelNames[lesson.level]}
-            </Badge>
-            <Badge className="font-mono text-[10px]">+{lesson.xp} XP</Badge>
-          </div>
-          <h1 className="font-medium text-lg">{lesson.title}</h1>
-        </div>
-      </div>
+
+      <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background">
+        <section className="flex flex-1 items-center">
+          <SidebarTrigger />
+          <Separator
+            className="data-[orientation=vertical]:h-4"
+            orientation="vertical"
+          />
+          <section className="flex items-start justify-between gap-4">
+            <div className="mb-1 flex items-center gap-2">
+              <Badge
+                className="font-mono text-[10px] uppercase"
+                variant="outline"
+              >
+                {levelNames[lesson.level]}
+              </Badge>
+              <Badge className="font-mono text-[10px]">+{lesson.xp} XP</Badge>
+            </div>
+            <h1 className="font-medium text-lg">{lesson.title}</h1>
+          </section>
+        </section>
+      </header>
 
       {/* File context */}
       <div className="flex items-center gap-2 text-muted-foreground text-xs">
