@@ -18,7 +18,6 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -49,12 +48,11 @@ export function ActionBar() {
     setExplanation,
     setIsExplaining,
     setShowExplanation,
-    setHasReexplained,
   } = useGameStore();
 
   const lesson = getLessonById(currentLessonId);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [explanation]);
@@ -190,13 +188,6 @@ export function ActionBar() {
     }
   };
 
-  const handleReexplain = async () => {
-    setExplanation("");
-    setHasReexplained(false);
-    setShowExplanation(true);
-    await handleExplain();
-  };
-
   return (
     <div className="flex items-center justify-between border-border border-t bg-card px-4 py-3">
       {/* Left: Validation result */}
@@ -294,12 +285,6 @@ export function ActionBar() {
               )}
               <div ref={ref} />
             </ScrollArea>
-            <SheetFooter>
-              <Button onClick={handleReexplain}>
-                <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-                Re-explicar
-              </Button>
-            </SheetFooter>
           </SheetContent>
         </Sheet>
 

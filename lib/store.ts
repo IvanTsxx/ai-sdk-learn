@@ -26,8 +26,6 @@ interface GameState {
     total: number;
   };
 
-  // Re-explanation tracking
-  hasReexplained: boolean;
   isExplaining: boolean;
   isLevelCompleted: (level: LessonLevel) => boolean;
   isRunning: boolean;
@@ -40,7 +38,7 @@ interface GameState {
   // Actions
   setCurrentLesson: (lessonId: string) => void;
   setExplanation: (explanation: string) => void;
-  setHasReexplained: (reexplained: boolean) => void;
+
   setIsExplaining: (explaining: boolean) => void;
   setIsRunning: (running: boolean) => void;
   setShowExplanation: (show: boolean) => void;
@@ -102,7 +100,6 @@ export const useGameStore = create<GameState>()(
           simulatedOutput: null,
           explanation: "",
           showExplanation: false,
-          hasReexplained: false,
         });
       },
 
@@ -161,7 +158,7 @@ export const useGameStore = create<GameState>()(
       setExplanation: (explanation) => set({ explanation }),
       setIsExplaining: (explaining) => set({ isExplaining: explaining }),
       setShowExplanation: (show) => set({ showExplanation: show }),
-      setHasReexplained: (hasReexplained) => set({ hasReexplained }),
+
       appendExplanation: (chunk) =>
         set((state) => ({ explanation: state.explanation + chunk })),
 
