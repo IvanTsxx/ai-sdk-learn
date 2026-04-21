@@ -42,6 +42,33 @@ export function ActionBar() {
   }
 
   const handleRun = async () => {
+    // Validar que el usuario haya modificado el codigo
+    const normalizedCurrent = currentCode.replace(/\s+/g, " ").trim();
+    const normalizedStarter = lesson.starterCode.replace(/\s+/g, " ").trim();
+
+    if (normalizedCurrent === normalizedStarter) {
+      setValidationResult({
+        pass: false,
+        hint: "Escribe tu solucion antes de ejecutar",
+      });
+      return;
+    }
+
+    // Verificar que no este vacio o solo tenga comentarios
+    const codeWithoutComments = currentCode
+      .replace(/\/\/.*$/gm, "")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (codeWithoutComments.length < 50) {
+      setValidationResult({
+        pass: false,
+        hint: "Completa los TODOs con tu implementacion",
+      });
+      return;
+    }
+
     setIsRunning(true);
     setSimulatedOutput(null);
     setValidationResult(null);

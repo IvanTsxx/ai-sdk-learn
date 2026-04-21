@@ -2,7 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
+import { LessonSidebar } from "@/components/game/lesson-sidebar";
+import { OutputSidebar } from "@/components/game/output-panel";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +44,14 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <TooltipProvider delay={200}>{children}</TooltipProvider>
+          <TooltipProvider delay={200}>
+            <SidebarProvider>
+              <LessonSidebar />
+
+              <SidebarInset>{children}</SidebarInset>
+              <OutputSidebar />
+            </SidebarProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
