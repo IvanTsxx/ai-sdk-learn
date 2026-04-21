@@ -176,15 +176,17 @@ export function ActionBar() {
         </Button>
 
         <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              disabled={isRunning || showSolution}
-              size="sm"
-              variant="ghost"
-            >
-              <Eye className="mr-1.5 h-3.5 w-3.5" />
-              Solucion
-            </Button>
+          <DialogTrigger
+            render={
+              <Button
+                disabled={isRunning || showSolution}
+                size="sm"
+                variant="ghost"
+              />
+            }
+          >
+            <Eye className="mr-1.5 h-3.5 w-3.5" />
+            Solucion
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -195,11 +197,11 @@ export function ActionBar() {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancelar</Button>
+              <DialogClose render={<Button variant="outline" />}>
+                Cancelar
               </DialogClose>
-              <DialogClose asChild>
-                <Button onClick={handleShowSolution}>Mostrar solucion</Button>
+              <DialogClose render={<Button onClick={handleShowSolution} />}>
+                Mostrar solucion
               </DialogClose>
             </DialogFooter>
           </DialogContent>
